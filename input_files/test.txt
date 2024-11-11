@@ -1,0 +1,16 @@
+input_files/test/class0_1.pgm
+input_files/test/class0_2.pgm
+input_files/test/class0_3.pgm
+input_files/test/class0_4.pgm
+input_files/test/class0_5.pgm
+input_files/test/class0_6.pgm
+input_files/test/class0_7.pgm
+input_files/test/class0_8.pgm
+input_files/test/class0_9.pgm
+input_files/test/class0_10.pgm
+input_files/test/class0_11.pgm
+input_files/test/class0_12.pgm
+input_files/test/class0_13.pgm
+input_files/test/class0_14.pgm
+input_files/test/class0_15.pgm
+

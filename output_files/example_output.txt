@@ -1,0 +1,8 @@
+Example output for gradle run -q --args="'input_files/train/train.txt' 'input_files/test/test.txt'  '2'"
+class0_1.pgm class0_7.pgm class0_8.pgm class0_9.pgm 
+class0_10.pgm class0_11.pgm class0_12.pgm class0_13.pgm class0_14.pgm class0_15.pgm class0_2.pgm class0_3.pgm class0_4.pgm class0_5.pgm class0_6.pgm
+
+Example output for gradle run -q --args="'input_files/train/train.txt' 'input_files/test/test.txt'  '3'" :
+class0_1.pgm class0_7.pgm class0_8.pgm class0_9.pgm 
+class0_10.pgm class0_11.pgm class0_12.pgm class0_13.pgm class0_2.pgm class0_3.pgm class0_4.pgm class0_5.pgm class0_6.pgm 
+class0_14.pgm class0_15.pgm

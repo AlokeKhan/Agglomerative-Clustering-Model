@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -360,6 +361,31 @@ public class CS_214_Project_Tester {
         perceptron.trainPerceptron(images, isPositive, 100);
 
         assertTrue(perceptron.getBias() != 0);
+}
+@Test
+public void testComputeSimilarityZeroDifference() {
+    double[][] perceptronScores = {
+        {1.0, 1.0, 2.0},
+        {2.0, 2.0, 3.0}
+    };
+    
+    double similarity = CS_214_Project.computeSimilarity(perceptronScores, 0, 1, 2);
+    assertEquals(Double.POSITIVE_INFINITY, similarity, "Similarity should be infinite for identical scores");
+}
+@Test
+public void testComputeSimilarityNonZeroDifference() {
+    double[][] perceptronScores = {
+        {1.0, 2.0, 3.0},
+        {2.0, 3.0, 4.0}
+    };
+    
+    double similarity = CS_214_Project.computeSimilarity(perceptronScores, 0, 1, 2);
+    assertTrue(similarity > 0, "Similarity should be positive for different scores");
+    assertTrue(Double.isFinite(similarity), "Similarity should be finite for different scores");
+}
+@Test
+public void testValidClusteringWithExistingFiles() {
+    CS_214_Project.makeClusteringMethod("input_files/train.txt", "input_files/test.txt", 2);
 }
 
 }

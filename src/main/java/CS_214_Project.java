@@ -53,24 +53,26 @@ public class CS_214_Project {
         Set<Integer> classnums = new HashSet<>();
 
         for (PGM image: images1){
-            classnums.add(image.getGroundTruth());
+            if (!(classnums.contains(image.getGroundTruth()))){
+                classnums.add(image.getGroundTruth());
+            }
         }
         if (!(classnums.size() >= 2)){
-            System.out.println(classnums.size());
-           // System.err.println("Error: training data has insufficient classes");
-           // throw new IllegalArgumentException();
+            System.err.println("Error: training data has insufficient classes");
+            throw new IllegalArgumentException();
         }
-
-        for (int i = 0; i < classnums.size(); i++){
-            Perceptronize(trainingSetFile, i);
-        }
-
+        Integer[] classNums = classnums.toArray(new Integer[classnums.size()]); 
 
         int numPerceptrons = classnums.size();
         Perceptron[] perceptrons = new Perceptron[numPerceptrons];
 
+        for (int i = 0; i < classnums.size(); i++){
+            perceptrons[i] = Perceptronize(trainingSetFile, classNums[i]);
+        }
+
+
         double[][] perceptronScores = new double[numPerceptrons][images2.size()];
-        for (int n = 0; n < numPerceptrons - 1; n++) {
+        for (int n = 0; n < numPerceptrons ; n++) {
             Perceptron perceptron = perceptrons[n];
             for (int i = 0; i < images2.size(); i++) {
                 perceptronScores[n][i] = perceptron.classify(images2.get(i).getHistogram());
@@ -78,19 +80,18 @@ public class CS_214_Project {
         }
 
         double[][] similarityMatrix = new double[images2.size()][images2.size()];
-for (int i = 0; i < images2.size(); i++) {
-    for (int j = 0; j < images2.size(); j++) {
-        if (i != j) {
-            similarityMatrix[i][j] = computeSimilarity(perceptronScores, i, j, numPerceptrons);
-        } else {
-            similarityMatrix[i][j] = Double.POSITIVE_INFINITY; // Self-similarity
-        }
-    }
+
+        for (int i = 0; i < images2.size(); i++) {
+            for (int j = 0; j < images2.size(); j++) {
+                if (i != j) {
+                    similarityMatrix[i][j] = computeSimilarity(perceptronScores, i, j, numPerceptrons);
+                } else {
+                    similarityMatrix[i][j] = Double.POSITIVE_INFINITY; // Self-similarity
+                }
+            }
 }
         Clusterize(testSetFile, k, 5, similarityMatrix);
 
-
-        
     }
 
     public static double computeSimilarity(double[][] perceptronScores, int imageIndex1, int imageIndex2, int numPerceptrons) {
@@ -152,7 +153,7 @@ for (int i = 0; i < images2.size(); i++) {
             theclusters.performClustering(images, similarityMatrix, k);
         }
         //theclusters.printCluster();
-        System.out.format("%.6f\n",theclusters.findOverallQuality());
+        //System.out.format("%.6f\n",theclusters.findOverallQuality());
     }
 
 }
@@ -191,7 +192,7 @@ class PGM {
             }
             int index = fileName.lastIndexOf("/");
             String realFileName = fileName.substring(index);
-            groundTruth = Character.getNumericValue(realFileName.charAt(5));
+            groundTruth = Character.getNumericValue(realFileName.charAt(6));
             //System.out.println(fileName);
             int width = scanner.nextInt();
             int height = scanner.nextInt();
@@ -455,13 +456,12 @@ class ClusterFuncs {
 
 
     public void performClustering(List<PGM> testImages, double[][] similarityMatrix, int K) {
-        // Initialize each image as its own cluster
         List<Cluster> clusters = new ArrayList<>();
         for (PGM image : testImages) {
             clusters.add(new Cluster(image));
         }
     
-        // Agglomerative clustering logic
+       
         while (clusters.size() > K) {
             double maxSimilarity = Double.NEGATIVE_INFINITY;
             Cluster mergeCluster1 = null;
@@ -478,17 +478,16 @@ class ClusterFuncs {
                 }
             }
     
-            // Merge the two most similar clusters
             if (mergeCluster1 != null && mergeCluster2 != null) {
                 mergeCluster1.combine(mergeCluster2);
                 clusters.remove(mergeCluster2);
             }
         }
-    
-        // Print the final clusters
-        for (Cluster cluster : clusters) {
+        for (Cluster cluster : clusters){
             cluster.printImageNames();
+            System.out.println();
         }
+        
     }
     
     public void compareAllClusters(int k) {
